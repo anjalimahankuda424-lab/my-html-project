@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Motown Stories Cafe</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Special+Elite&family=Lora:ital,wght@0,400;0,600;1,400&family=Oswald:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black:    #0a0a0a;
+      --charcoal: #1a1a1a;
+      --iron:     #2c2c2c;
+      --gold:     #c9933a;
+      --amber:    #e8a020;
+      --cream:    #f0e6d3;
+      --dust:     #9a8878;
+      --rust:     #8b2e0f;
+      --white:    #f5f0e8;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Lora', Georgia, serif;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+
+    /* ── FILM GRAIN OVERLAY ── */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 9999;
+      opacity: 0.35;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,10,0.95);
+      border-bottom: 1px solid var(--gold);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem;
+      height: 58px;
+      backdrop-filter: blur(4px);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      color: var(--gold);
+      letter-spacing: 0.15em;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--dust);
+      text-decoration: none;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 300;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      position: relative;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      text-align: center;
+      padding: 7rem 2rem 4rem;
+      overflow: hidden;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: url('img4.jpg') center center / cover no-repeat;
+      filter: brightness(0.25) contrast(1.2) saturate(0.6);
+    }
+    .hero-bg::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.7) 100%);
+    }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-family: 'Special Elite', cursive;
+      font-size: 0.7rem;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      padding: 0.4rem 1.2rem;
+      margin-bottom: 2rem;
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.5rem, 13vw, 11rem);
+      line-height: 0.9;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 80px rgba(201,147,58,0.3);
+    }
+    .hero h1 span { color: var(--gold); display: block; }
+    .hero-tagline {
+      font-family: 'Special Elite', cursive;
+      color: var(--dust);
+      font-size: 0.95rem;
+      letter-spacing: 0.12em;
+      margin-top: 1.5rem;
+      font-style: italic;
+    }
+    .hero-line {
+      width: 1px; height: 60px;
+      background: var(--gold);
+      margin: 2rem auto;
+      opacity: 0.5;
+    }
+    .hero-meta {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 300;
+      letter-spacing: 0.4em;
+      text-transform: uppercase;
+      color: var(--dust);
+    }
+    .scroll-hint {
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.6rem;
+      letter-spacing: 0.3em;
+      color: var(--gold);
+      opacity: 0.6;
+      text-transform: uppercase;
+    }
+
+    /* ── SECTION SHARED ── */
+    section { padding: 6rem 2rem; }
+    .inner { max-width: 1100px; margin: 0 auto; }
+    .eyebrow {
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.65rem;
+      font-weight: 300;
+      letter-spacing: 0.45em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.75rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      color: var(--white);
+      line-height: 0.95;
+      letter-spacing: 0.03em;
+      margin-bottom: 1.5rem;
+    }
+    .gold-rule {
+      width: 48px; height: 1px;
+      background: var(--gold);
+      margin-bottom: 3rem;
+    }
+
+    /* ── ABOUT ── */
+    #about { background: var(--charcoal); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: center;
+    }
+    .about-text p { color: #b0a090; margin-bottom: 1.2rem; font-size: 0.95rem; }
+    .about-photos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 220px 220px;
+      gap: 8px;
+    }
+    .about-photos img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(30%) contrast(1.1);
+      transition: filter 0.3s;
+    }
+    .about-photos img:hover { filter: grayscale(0%) contrast(1.1); }
+    .about-photos img:first-child { grid-row: span 2; }
+    .vibe-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+    .vibe-tag {
+      border: 1px solid var(--iron);
+      color: var(--dust);
+      font-family: 'Special Elite', cursive;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      padding: 0.3rem 0.8rem;
+    }
+
+    /* ── GALLERY STRIP ── */
+    .gallery-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      height: 280px;
+    }
+    .gallery-strip img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      filter: grayscale(50%) contrast(1.1);
+      transition: filter 0.4s, transform 0.4s;
+    }
+    .gallery-strip img:hover {
+      filter: grayscale(0%) contrast(1.1);
+      transform: scale(1.03);
+      z-index: 2;
+      position: relative;
+    }
+
+    /* ── MENU ── */
+    #menu { background: var(--black); }
+    .menu-tabs {
+      display: flex; flex-wrap: wrap; gap: 0;
+      margin-bottom: 3rem;
+      border-bottom: 1px solid var(--iron);
+    }
+    .tab-btn {
+      padding: 0.6rem 1.5rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-family: 'Oswald', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--dust);
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: -1px;
+    }
+    .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+    .tab-btn:hover { color: var(--white); }
+    .menu-panel { display: none; }
+    .menu-panel.active { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem 4rem; }
+    .menu-item {
+      display: flex; justify-content: space-between; align-items: baseline;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .menu-item-left { flex: 1; }
+    .menu-item-name {
+      font-family: 'Oswald', sans-serif;
+      font-weight: 400;
+      font-size: 0.95rem;
+      color: var(--white);
+      letter-spacing: 0.05em;
+    }
+    .menu-item-desc { font-size: 0.75rem; color: var(--dust); font-style: italic; margin-top: 0.1rem; }
+    .menu-item-price {
+      font-family: 'Special Elite', cursive;
+      color: var(--gold);
+      font-size: 0.9rem;
+      white-space: nowrap;
+      margin-left: 1.5rem;
+    }
+    .menu-note {
+      margin-top: 2.5rem;
+      font-family: 'Special Elite', cursive;
+      font-size: 0.8rem;
+      color: var(--dust);
+      letter-spacing: 0.1em;
+      border-left: 2px solid var(--gold);
+      padding-left: 1rem;
+    }
+
+    /* ── SPECIALS BANNER ── */
+    .specials-banner {
+      background: var(--gold);
+      padding: 1rem 2rem;
+      text-align: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: 0.3em;
+      color: var(--black);
+    }
+
+    /* ── EXPERIENCE ── */
+    #experience { background: var(--charcoal); }
+    .exp-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 1rem;
+    }
+    .exp-card {
+      background: var(--iron);
+      padding: 2.5rem 2rem;
+      border-top: 2px solid transparent;
+      transition: border-color 0.2s;
+    }
+    .exp-card:hover { border-color: var(--gold); }
+    .exp-icon {
+      font-size: 2rem;
+      margin-bottom: 1.2rem;
+      display: block;
+    }
+    .exp-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.4rem;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      margin-bottom: 0.75rem;
+    }
+    .exp-card p { color: var(--dust); font-size: 0.88rem; line-height: 1.6; }
+
+    /* ── RIDES SECTION ── */
+    #rides { background: var(--black); }
+    .rides-intro { color: #b0a090; font-size: 0.95rem; max-width: 600px; margin-bottom: 3rem; }
+    .rides-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+    }
+    .ride-cat {
+      background: var(--iron);
+      padding: 1.5rem;
+    }
+    .ride-cat h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(201,147,58,0.3);
+      padding-bottom: 0.5rem;
+    }
+    .ride-item {
+      display: flex; justify-content: space-between;
+      padding: 0.4rem 0;
+      font-size: 0.8rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+    }
+    .ride-name { color: var(--cream); }
+    .ride-price { color: var(--gold); font-family: 'Special Elite', cursive; }
+
+    /* ── VISIT ── */
+    #visit { background: var(--charcoal); }
+    .visit-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+    }
+    .visit-block h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      margin: 2rem 0 0.5rem;
+    }
+    .visit-block h3:first-child { margin-top: 0; }
+    .visit-block p, .visit-block li { color: #b0a090; font-size: 0.9rem; }
+    .hours-row { display: flex; justify-content: space-between; padding: 0.3rem 0; border-bottom: 1px solid var(--iron); font-size: 0.85rem; }
+    .hours-row span:first-child { color: #b0a090; }
+    .hours-row span:last-child { color: var(--gold); font-family: 'Special Elite', cursive; }
+    .visit-img {
+      width: 100%; height: 100%; min-height: 300px;
+      object-fit: cover;
+      filter: grayscale(40%) contrast(1.1);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--black);
+      border-top: 1px solid var(--gold);
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    .footer-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.15em;
+      color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .footer-tagline {
+      font-family: 'Special Elite', cursive;
+      font-size: 0.75rem;
+      color: var(--dust);
+      letter-spacing: 0.2em;
+      margin-bottom: 1.5rem;
+    }
+    .footer-copy {
+      font-size: 0.75rem;
+      color: var(--iron);
+      letter-spacing: 0.1em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 800px) {
+      .about-grid, .visit-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+      .exp-grid, .rides-grid { grid-template-columns: 1fr; }
+      .menu-panel.active { grid-template-columns: 1fr; }
+      .gallery-strip { grid-template-columns: repeat(3, 1fr); height: 180px; }
+      .gallery-strip img:nth-child(n+4) { display: none; }
+      nav { padding: 0 1rem; }
+      .nav-links { gap: 1rem; }
+      .nav-links a { font-size: 0.65rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">Motown Stories</div>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#menu">Menu</a></li>
+    <li><a href="#rides">Rides</a></li>
+    <li><a href="#visit">Visit</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Coffee · Culture · Chrome</div>
+    <h1>Motown<span>Stories</span>Cafe</h1>
+    <p class="hero-tagline">Drive It. Sip It. Repeat.</p>
+    <div class="hero-line"></div>
+    <p class="hero-meta">Open Daily &nbsp;·&nbsp; Where Every Cup Tells A Story</p>
+  </div>
+  <div class="scroll-hint">↓ &nbsp; scroll</div>
+</section>
+
+<!-- GALLERY STRIP -->
+<div class="gallery-strip">
+  <img src="img4.jpg" alt="Cafe interior"/>
+  <img src="img5.jpg" alt="Cafe bar"/>
+  <img src="img1.jpg" alt="Cafe atmosphere"/>
+  <img src="img2.jpg" alt="Mexican Pizza"/>
+  <img src="img3.jpg" alt="Cafe exterior"/>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="inner">
+    <div class="about-grid">
+      <div class="about-text">
+        <p class="eyebrow">Our Story</p>
+        <h2 class="section-title">Where Coffee<br>Meets Chrome</h2>
+        <div class="gold-rule"></div>
+        <p>Motown Stories Cafe is not just a place to grab a coffee — it's a full throttle experience. Born from a love of classic cars, vintage motorcycles, and soul music, we built a space that feels like stepping into a 1960s Hollywood garage that somehow also makes the best espresso in town.</p>
+        <p>From the exposed brick walls covered in motorcycle art to the Harley parked by the bar — every corner has a story. Come in, slow down, and find yours.</p>
+        <div class="vibe-tags">
+          <span class="vibe-tag">Self Drive Cars</span>
+          <span class="vibe-tag">Specialty Coffee</span>
+          <span class="vibe-tag">Hot Rides</span>
+          <span class="vibe-tag">Live Vibes</span>
+          <span class="vibe-tag">Vintage Soul</span>
+        </div>
+      </div>
+      <div class="about-photos">
+        <img src="img4.jpg" alt="Motown interior wall art"/>
+        <img src="img5.jpg" alt="Cafe bar"/>
+        <img src="img1.jpg" alt="Cafe seating"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SPECIALS BANNER -->
+<div class="specials-banner">
+  ★ &nbsp; Specials: Pain Au Sussie · Pain Au Chocolat · Coffee Tea Cake · Blueberry Tea Cake &nbsp; ★
+</div>
+
+<!-- MENU -->
+<section id="menu">
+  <div class="inner">
+    <p class="eyebrow">What We Serve</p>
+    <h2 class="section-title">The Menu</h2>
+    <div class="gold-rule"></div>
+
+    <div class="menu-tabs">
+      <button class="tab-btn active" onclick="showTab('black','this')">Black Magic</button>
+      <button class="tab-btn" onclick="showTab('white','this')">White Magic</button>
+      <button class="tab-btn" onclick="showTab('cold','this')">On The Rocks</button>
+      <button class="tab-btn" onclick="showTab('frappe','this')">Frappes</button>
+      <button class="tab-btn" onclick="showTab('teas','this')">Teas</button>
+      <button class="tab-btn" onclick="showTab('lemon','this')">Lemonades</button>
+      <button class="tab-btn" onclick="showTab('food','this')">Food</button>
+      <button class="tab-btn" onclick="showTab('shakes','this')">Shakes</button>
+      <button class="tab-btn" onclick="showTab('sundae','this')">Sundaes</button>
+    </div>
+
+    <!-- BLACK MAGIC -->
+    <div id="black" class="menu-panel active">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Espresso</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Americano</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Arabic Coffee</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Turkish Coffee</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Indie Americano</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Irish Coffee</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">White Italian</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Macchiato</div></div></div>
+    </div>
+
+    <!-- WHITE MAGIC -->
+    <div id="white" class="menu-panel">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cappuccino</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cafe Latte</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cafe Mocha</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cafe Caramel</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Mint Mocha</div><div class="menu-item-desc">Popular</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Indie Latte</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Flat White</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Hot Chocolate</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cardamom Latte</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cinnamon Latte</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Almond Milk Latte</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Almond Turmeric Milk</div></div></div>
+    </div>
+
+    <!-- ON THE ROCKS -->
+    <div id="cold" class="menu-panel">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Iced Americano</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Iced Vietnamese</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Iced Cappuccino</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Iced Mocha</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Espresso Tonic Water</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Espresso Ginger Ale</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cold Brew</div><div class="menu-item-desc">Popular</div></div></div>
+    </div>
+
+    <!-- FRAPPES -->
+    <div id="frappe" class="menu-panel">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cafe Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Mocha Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Irish Frappe</div><div class="menu-item-desc">Popular</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Hazel Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Caramel Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Tall N Dark</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Coffee Crunch</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Rose Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Thandai Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Black Currant Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Litchi Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Butter Scotch Frappe</div><div class="menu-item-desc">Popular</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Blueberry Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Vanilla Frappe</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Choco Frappe</div></div></div>
+    </div>
+
+    <!-- TEAS -->
+    <div id="teas" class="menu-panel">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Masala Chai</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Kesar Elaichi Chai</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Adrak Chai</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Earl Grey</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Sulaimani</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Darjeeling</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Chamomile</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Oriental Sencha</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">English Breakfast</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Jasmine Blossom</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Rosehip & Hibiscus</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Winter Dream</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Chamomile Green</div><div class="menu-item-desc">Kettle tea</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Peppermint</div><div class="menu-item-desc">Kettle tea</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Lavender</div><div class="menu-item-desc">Kettle tea</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Apple Cinnamon</div><div class="menu-item-desc">Kettle tea</div></div></div>
+    </div>
+
+    <!-- LEMONADES -->
+    <div id="lemon" class="menu-panel">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Sweet & Salt Lemonade</div></div><div class="menu-item-price">₹200</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Spicy Lemonade</div></div><div class="menu-item-price">₹200</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Pomegranate</div></div><div class="menu-item-price">₹200</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Raspberry Lemonade</div></div><div class="menu-item-price">₹200</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Mint Lemonade</div></div><div class="menu-item-price">₹200</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Electric Lemonade</div></div><div class="menu-item-price">₹200</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Masala Pan Soda</div></div><div class="menu-item-price">₹200</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Kiwi Lemonade</div></div><div class="menu-item-price">₹200</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Tamarind Lemonade</div></div><div class="menu-item-price">₹200</div></div>
+    </div>
+
+    <!-- FOOD -->
+    <div id="food" class="menu-panel">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Korean Cream Cheese Bun</div></div><div class="menu-item-price">₹180</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Chilli Cheese Toast</div><div class="menu-item-desc">Regular / multigrain</div></div><div class="menu-item-price">₹215</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Air Fries</div><div class="menu-item-desc">Salted / peri peri</div></div><div class="menu-item-price">₹225</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cheesemelt Pesto Sandwich</div></div><div class="menu-item-price">₹250</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Tandoori Paneer Sandwich</div></div><div class="menu-item-price">₹250</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Arrabiata Pasta</div></div><div class="menu-item-price">₹250</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Alfredo Pasta</div></div><div class="menu-item-price">₹250</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Mac N Cheese</div></div><div class="menu-item-price">₹280</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Margherita Pizza</div></div><div class="menu-item-price">₹225</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Basil Pesto Pizza</div></div><div class="menu-item-price">₹250</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Four Cheese Pizza</div></div><div class="menu-item-price">₹250</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Mexican Pizza</div><div class="menu-item-desc">Popular</div></div><div class="menu-item-price">₹250</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Croissant</div></div><div class="menu-item-price">—</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cinnamon Bun</div></div><div class="menu-item-price">—</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Red Velvet Cake</div></div><div class="menu-item-price">—</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Tiramisu Cake</div></div><div class="menu-item-price">—</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Apple Pie & Coffee</div></div><div class="menu-item-price">—</div></div>
+    </div>
+
+    <!-- SHAKES -->
+    <div id="shakes" class="menu-panel">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Chocolate Milkshake</div></div><div class="menu-item-price">₹225</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Strawberry Milkshake</div></div><div class="menu-item-price">₹225</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Vanilla Milkshake</div></div><div class="menu-item-price">₹225</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Mango Milkshake</div></div><div class="menu-item-price">₹225</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Butterscotch Milkshake</div><div class="menu-item-desc">Popular</div></div><div class="menu-item-price">₹225</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Melon Strawberry Slush</div></div><div class="menu-item-price">—</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Guava Slush</div></div><div class="menu-item-price">—</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Mango Slush</div></div><div class="menu-item-price">—</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Cool Blue Slush</div></div><div class="menu-item-price">—</div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Orange Slush</div></div><div class="menu-item-price">—</div></div>
+    </div>
+
+    <!-- SUNDAES -->
+    <div id="sundae" class="menu-panel">
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Black Magic Sundae</div><div class="menu-item-desc">Hot choc brownie, vanilla ice cream, chocolate syrup</div></div></div>
+      <div class="menu-item"><div class="menu-item-left"><div class="menu-item-name">Sizzling Brownie</div><div class="menu-item-desc">Brownie with ice cream & chocolate sauce over sizzler plate</div></div></div>
+    </div>
+
+    <p class="menu-note">Ask your barista about our Speciality Espresso, Kopi Luwak, and Brewing Methods — Espresso Machine, French Press, Pour Over, Syphon & more.</p>
+  </div>
+</section>
+
+<!-- RIDES -->
+<section id="rides">
+  <div class="inner">
+    <p class="eyebrow">Self Drive & Hot Rides</p>
+    <h2 class="section-title">Drive It.<br>Sip It. Repeat.</h2>
+    <div class="gold-rule"></div>
+    <p class="rides-intro">Motown Stories is one of the few cafes in the country where you can book a self-drive car or a hot ride supercar experience alongside your coffee. Yes, really.</p>
+    <div class="rides-grid">
+      <div class="ride-cat">
+        <h4>Hatchback</h4>
+        <div class="ride-item"><span class="ride-name">Suzuki Swift</span><span class="ride-price">₹175</span></div>
+        <div class="ride-item"><span class="ride-name">Baleno Sigma MT</span><span class="ride-price">₹200</span></div>
+        <div class="ride-item"><span class="ride-name">Toyota Glanza MT</span><span class="ride-price">₹200</span></div>
+        <div class="ride-item"><span class="ride-name">Toyota Glanza</span><span class="ride-price">₹230</span></div>
+        <div class="ride-item"><span class="ride-name">Hyundai i20 2021</span><span class="ride-price">₹250</span></div>
+      </div>
+      <div class="ride-cat">
+        <h4>Sedan & MUV</h4>
+        <div class="ride-item"><span class="ride-name">Suzuki Dzire MT</span><span class="ride-price">₹230</span></div>
+        <div class="ride-item"><span class="ride-name">Honda Amaze</span><span class="ride-price">₹350</span></div>
+        <div class="ride-item"><span class="ride-name">Toyota Innova MT</span><span class="ride-price">₹400</span></div>
+        <div class="ride-item"><span class="ride-name">Kia Carens IMT</span><span class="ride-price">₹500</span></div>
+        <div class="ride-item"><span class="ride-name">Kia Carnival</span><span class="ride-price">₹900</span></div>
+        <div class="ride-item"><span class="ride-name">Merc V Class 220d</span><span class="ride-price">₹4,500</span></div>
+      </div>
+      <div class="ride-cat">
+        <h4>Electric</h4>
+        <div class="ride-item"><span class="ride-name">MG Comet</span><span class="ride-price">₹400</span></div>
+        <div class="ride-item"><span class="ride-name">MG ZS</span><span class="ride-price">₹600</span></div>
+        <div class="ride-item"><span class="ride-name">Hyundai Kona</span><span class="ride-price">₹600</span></div>
+        <div class="ride-item"><span class="ride-name">BYD E6</span><span class="ride-price">₹700</span></div>
+        <div class="ride-item"><span class="ride-name">BMW i4</span><span class="ride-price">₹1,850</span></div>
+      </div>
+      <div class="ride-cat">
+        <h4>Hot Rides 🔥</h4>
+        <div class="ride-item"><span class="ride-name">Lamborghini Gallardo</span><span class="ride-price">Ask</span></div>
+        <div class="ride-item"><span class="ride-name">Porsche 911 Carrera</span><span class="ride-price">Ask</span></div>
+        <div class="ride-item"><span class="ride-name">Jaguar F-Type</span><span class="ride-price">Ask</span></div>
+        <div class="ride-item"><span class="ride-name">Ford Mustang</span><span class="ride-price">Ask</span></div>
+        <div class="ride-item"><span class="ride-name">Audi RS5</span><span class="ride-price">Ask</span></div>
+        <div class="ride-item"><span class="ride-name">Mercedes CLA 45 AMG</span><span class="ride-price">Ask</span></div>
+        <div class="ride-item"><span class="ride-name">Audi A3 Convertible</span><span class="ride-price">Ask</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="inner">
+    <p class="eyebrow">The Vibe</p>
+    <h2 class="section-title">More Than<br>A Cafe</h2>
+    <div class="gold-rule"></div>
+    <div class="exp-grid">
+      <div class="exp-card">
+        <span class="exp-icon">☕</span>
+        <h3>Specialty Coffee</h3>
+        <p>From Kopi Luwak to Syphon brews — our bar is stocked with the world's finest coffees brewed the way they deserve to be.</p>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🏍️</span>
+        <h3>The Iron & Ink Wall</h3>
+        <p>Exposed brick, motorcycle murals, vintage frames, and a real Harley by the bar. This is the vibe. This is Motown.</p>
+      </div>
+      <div class="exp-card">
+        <span class="exp-icon">🚗</span>
+        <h3>Self Drive Experience</h3>
+        <p>Grab a coffee, grab the keys. From Hatchbacks to Lamborghinis — we're the only cafe where the ride is also on the menu.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VISIT -->
+<section id="visit">
+  <div class="inner">
+    <div class="visit-grid">
+      <div>
+        <p class="eyebrow">Find Us</p>
+        <h2 class="section-title">Come In</h2>
+        <div class="gold-rule"></div>
+        <div class="visit-block">
+          <h3>Hours</h3>
+          <div class="hours-row"><span>Monday – Friday</span><span>Open Daily</span></div>
+          <div class="hours-row"><span>Saturday</span><span>Open Daily</span></div>
+          <div class="hours-row"><span>Sunday</span><span>Open Daily</span></div>
+          <h3>Contact</h3>
+          <p>Ask us on Instagram or Google Maps for exact timings and reservations.</p>
+          <h3>What To Expect</h3>
+          <p>Industrial interiors · Motorcycle art · Specialty coffee bar · Self-drive car booking · Hot Ride experiences · A vibe you won't find anywhere else.</p>
+        </div>
+      </div>
+      <div>
+        <img src="img5.jpg" alt="Motown Stories Cafe interior" class="visit-img"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-logo">Motown Stories Cafe</div>
+  <div class="footer-tagline">Drive It · Sip It · Repeat</div>
+  <div class="footer-copy">© 2026 Motown Stories Cafe · All Rights Reserved</div>
+</footer>
+
+<script>
+  function showTab(id, el) {
+    document.querySelectorAll('.menu-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+</script>
+</body>
+</html>
